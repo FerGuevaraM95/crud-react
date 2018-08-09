@@ -6,7 +6,23 @@ import Header from './Header';
 import Navigation from './Navigation';
 
 class Router extends Component {
-    state = {  }
+    state = {
+        posts: []
+    }
+
+    componentDidMount() {
+        this.getPost();
+    }
+
+    getPost = () => {
+        axios.get(`https://jsonplaceholder.typicode.com/posts`)
+            .then(res => {
+                this.setState({
+                    posts: res.data
+                })
+            })
+    }
+
     render() { 
         return (
             <BrowserRouter>
