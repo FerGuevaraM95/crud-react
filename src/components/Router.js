@@ -6,6 +6,7 @@ import Header from './Header';
 import Navigation from './Navigation';
 import Posts from './Posts';
 import SinglePost from './SinglePost';
+import Form from './Form';
 
 class Router extends Component {
     state = {
@@ -36,6 +37,20 @@ class Router extends Component {
                     this.setState({
                         posts: result
                     })
+                }
+            })
+    }
+
+    createPost = (post) => {
+        axios.post(`https://jsonplaceholder.typicode.com/posts/`, {post})
+            .then(res => {
+                if(res.status === 201) {
+                    let postId = {id: res.data.id};
+                    const newPost = Object.assign({}, res.data.post, postId);
+
+                    this.setState(prevState =>({
+                        posts: [...prevState.posts, newPost]
+                    }))
                 }
             })
     }
@@ -73,6 +88,14 @@ class Router extends Component {
                                     />
                                 )
                             } }
+                            />
+                            <Route exact path="/create" render={() => {
+                                return (
+                                    <Form
+                                        createPost={this.createPost}
+                                    />
+                                )
+                            }}
                             />
                         </Switch>
                     </div>
