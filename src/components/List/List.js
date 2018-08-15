@@ -20,7 +20,7 @@ class List extends Component {
             </React.Fragment>
         )
 
-        console.log(posts);
+        // console.log(posts);
     }
 
     render() { 

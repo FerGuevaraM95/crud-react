@@ -5,6 +5,7 @@ import axios from 'axios';
 import Header from './Header';
 import Navigation from './Navigation';
 import Posts from './Posts';
+import SinglePost from './SinglePost';
 
 class Router extends Component {
     state = {
@@ -39,7 +40,23 @@ class Router extends Component {
                                     />
                                 )
                             }}
+                            />
+                            <Route exact path="/post/:postId" render={ (props) => {
+                                let idPost = props.location.pathname.replace('/post/', '');
 
+                                const posts = this.state.posts;
+
+                                let filterPost;
+                                filterPost = posts.filter(post => (
+                                    post.id == idPost
+                                ))
+
+                                return (
+                                    <SinglePost
+                                        post={filterPost[0]}
+                                    />
+                                )
+                            } }
                             />
                         </Switch>
                     </div>
