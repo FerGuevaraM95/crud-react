@@ -8,6 +8,7 @@ import Navigation from './Navigation';
 import Posts from './Posts';
 import SinglePost from './SinglePost';
 import Form from './Form';
+import Edit from './Edit';
 
 class Router extends Component {
     state = {
@@ -61,6 +62,34 @@ class Router extends Component {
             })
     }
 
+    editPost = (updatePost) => {
+        // console.log(updatePost);
+
+        const { id } = updatePost;
+
+        axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, { updatePost })
+            .then(res => {
+                if(res.status === 200) {
+                    swal(
+                        'Post Actualizado',
+                        'Se guardo correctamente',
+                        'success'
+                    )
+                    let postId = res.data.id;
+
+                    const posts = [...this.state.posts];
+
+                    const postEdit = posts.findIndex(post => postId === post.id);
+
+                    posts[postEdit] = updatePost;
+
+                    this.setState({
+                        posts
+                    })
+                }
+            })
+    }
+
     render() { 
         return (
             <BrowserRouter>
@@ -99,6 +128,24 @@ class Router extends Component {
                                 return (
                                     <Form
                                         createPost={this.createPost}
+                                    />
+                                )
+                            }}
+                            />
+                            <Route exact path="/edit/:postId" render={(props) => {
+                                let idPost = props.location.pathname.replace('/edit/', '');
+
+                                const posts = this.state.posts;
+
+                                let filterPost;
+                                filterPost = posts.filter(post => (
+                                    post.id === Number(idPost)
+                                ))
+
+                                return (
+                                    <Edit
+                                        post={filterPost[0]}
+                                        editPost={this.editPost}
                                     />
                                 )
                             }}
